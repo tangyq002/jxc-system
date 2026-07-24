@@ -1,9 +1,12 @@
 package com.lzj.admin.pojo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -36,6 +39,8 @@ public class Supplier implements Serializable {
     private String name;
 
     @ApiModelProperty(value = "联系电话")
+    //告诉mybatis-plus生成sql语句这个字段要加双引号即"number"(number为oracle关键字不识别)
+    @TableField("\"number\"")
     private String number;
 
     @ApiModelProperty(value = "备注")
