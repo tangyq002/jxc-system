@@ -86,6 +86,9 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
         AssertUtil.isTrue(!(this.updateById(supplier)),"记录更新失败!");
 	}
 
+	/**
+	 * 删除多个
+	 */
 	@Override
 	public void deleteSupplier(Integer[] ids) {
 		AssertUtil.isTrue(null == ids || ids.length==0,"请选择待删除记录id");
@@ -98,6 +101,9 @@ public class SupplierServiceImpl extends ServiceImpl<SupplierMapper, Supplier> i
         AssertUtil.isTrue(!(this.updateBatchById(supplierList)),"记录删除失败!");
 	}
 
+	/**
+	 * 查询全部
+	 */
 	@Override
 	public Supplier findSupplierByName(String name) {
 		return this.getOne(new QueryWrapper<Supplier>().eq("is_del",0).eq("name",name));

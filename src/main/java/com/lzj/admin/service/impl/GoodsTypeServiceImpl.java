@@ -28,4 +28,12 @@ import java.util.stream.Collectors;
 @Service
 public class GoodsTypeServiceImpl extends ServiceImpl<GoodsTypeMapper, GoodsType> implements GoodsTypeService {
 
+	/**
+	 * 查询商品分类列表
+	 */
+	@Override
+	public List<GoodsType> queryAllGoodsTypes() {
+		return this.list();
+	}
+
 }

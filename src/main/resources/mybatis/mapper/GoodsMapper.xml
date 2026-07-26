@@ -2,4 +2,64 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lzj.admin.mapper.GoodsMapper">
 
+	<!-- 商品查询结果映射 -->
+	<resultMap id="BaseResultMap" type="com.lzj.admin.pojo.Goods">
+		<id column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="inventory_quantity" property="inventoryQuantity" />
+		<result column="min_num" property="minNum" />
+		<result column="model" property="model" />
+		<result column="name" property="name" />
+		<result column="producer" property="producer" />
+		<result column="purchasing_price" property="purchasingPrice" />
+		<result column="remarks" property="remarks" />
+		<result column="selling_price" property="sellingPrice" />
+		<result column="unit" property="unit" />
+		<result column="type_id" property="typeId" />
+		<result column="state" property="state" />
+		<result column="last_purchasing_price" property="lastPurchasingPrice" />
+		<result column="is_del" property="isDel" />
+		<!-- 联表查询出来的字段 -->
+		<result column="unitName" property="unitName" />
+		<result column="typeName" property="typeName" />
+		<result column="saleTotal" property="saleTotal" />
+	</resultMap>
+	
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		g.id,g.code,g.inventory_quantity,g.min_num,g.model,g.name,g.producer,g.purchasing_price,
+		g.remarks,g.selling_price,g.unit,g.type_id,g.state,g.last_purchasing_price,g.is_del
+	</sql>
+
+	<!-- 商品列表查询 多条件查询-->
+	<select id="queryGoodsList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		,gu.name as unitName,gt.name as typeName
+		from t_goods g
+		left join t_goods_unit gu ON g.unit = gu.id
+		left join t_goods_type gt ON g.type_id = gt.id
+		<where>
+		    g.is_del = 0
+		    <if test="goodsQuery.goodsName != null and goodsQuery.goodsName != ''">
+		        and g.name like '%${goodsQuery.goodsName}%'
+		    </if>
+		        <if test="goodsQuery.typeId != null and goodsQuery.typeId != 0">
+		        	<!-- 把父类分类下的商品也查出来-->
+			        and g.type_id in
+				    (select id from t_goods_type 
+				    where id = #{goodsQuery.typeId} or p_id = #{goodsQuery.typeId})
+			    </if>
+		</where>
+	</select>
+	
+	<!-- 根据id查询商品详情，联表查 -->
+	<select id="queryGoodsById" resultMap="BaseResultMap">
+	    select
+	    <include refid="Base_Column_List"/>
+	    ,gu.name as unitName,gt.name as typeName from t_goods g
+	    left join t_goods_unit gu on g.unit = gu.id
+	    left join t_goods_type gt on g.type_id = gt.id
+	    where g.id = #{id}
+	</select>
 </mapper>
