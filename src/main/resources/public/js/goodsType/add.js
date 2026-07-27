@@ -15,7 +15,7 @@ layui.use(['form', 'layer'], function () {
                     parent.location.reload();
                 }, 500);
             } else {
-                layer.message(
+                layer.msg(
                     res.message, {
                         icon: 5
                     }

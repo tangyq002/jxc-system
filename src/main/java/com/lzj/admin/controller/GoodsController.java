@@ -68,7 +68,6 @@ public class GoodsController {
         return "goods/add_update";
     }
 
-
     /**
      * 添加商品
      * @param goods
