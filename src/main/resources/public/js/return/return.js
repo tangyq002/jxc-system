@@ -12,7 +12,7 @@ layui.use(['laydate','table','layer'],function(){
 
     $.ajax({
         type:"post",
-        url:ctx+"/supplier/allGoodsSuppliers",
+        url:ctx+"/supplier/allSuppliers",
         success:function (data){
             if (data!== null) {
                 $.each(data, function(index, item) {

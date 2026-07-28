@@ -130,5 +130,24 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, Goods> implements
 		return goodsMapper.queryGoodsById(id);
 	}
 
+	/**
+	 * 查询当前库存列表
+	 */
+	@Override
+	public Map<String, Object> stockList(GoodsQuery goodsQuery) {
+		//创建分页对象
+		IPage<Goods> page =new Page<Goods>(goodsQuery.getPage(),goodsQuery.getLimit());
+        QueryWrapper<Goods> queryWrapper =new QueryWrapper<Goods>();
+        //拼接条件，查询没删除的数据
+        queryWrapper.eq("is_del",0);
+        //是否输入查询内容，进行模糊查询
+        if(StringUtils.isNotBlank(goodsQuery.getGoodsName())){
+            queryWrapper.like("name",goodsQuery.getGoodsName());
+        }
+        //联表查询
+        page = this.baseMapper.stockList(page,goodsQuery);
+        return PageResultUtil.setResult(page.getTotal(),page.getRecords());
+	}
+
 
 }

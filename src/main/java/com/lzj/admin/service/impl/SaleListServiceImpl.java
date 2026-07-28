@@ -1,17 +1,26 @@
 package com.lzj.admin.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lzj.admin.mapper.SaleListMapper;
 import com.lzj.admin.model.CountResultModel;
 import com.lzj.admin.pojo.Goods;
-import com.lzj.admin.pojo.PurchaseList;
 import com.lzj.admin.pojo.SaleList;
-import com.lzj.admin.mapper.SaleListMapper;
 import com.lzj.admin.pojo.SaleListGoods;
 import com.lzj.admin.query.SaleListQuery;
 import com.lzj.admin.service.GoodsService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lzj.admin.service.GoodsTypeService;
 import com.lzj.admin.service.SaleListGoodsService;
 import com.lzj.admin.service.SaleListService;
@@ -19,14 +28,6 @@ import com.lzj.admin.utils.AssertUtil;
 import com.lzj.admin.utils.DateUtil;
 import com.lzj.admin.utils.PageResultUtil;
 import com.lzj.admin.utils.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 销售单服务类
@@ -130,5 +131,10 @@ public class SaleListServiceImpl extends ServiceImpl<SaleListMapper, SaleList> i
     public List<Map<String, Object>> countDaySale(String begin, String end) {
         return this.baseMapper.countDaySale(begin,end);
     }
+
+	@Override
+	public List<Map<String, Object>> countMonthSale(String begin, String end) {
+		return this.baseMapper.countMonthSale(begin, end);
+	}
 
 }

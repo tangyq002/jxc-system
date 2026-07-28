@@ -22,4 +22,6 @@ public interface GoodsMapper extends BaseMapper<Goods> {
 	 */
 	Goods queryGoodsById(Integer id);
 
+	IPage<Goods> stockList(IPage<Goods> page, GoodsQuery goodsQuery);
+
 }

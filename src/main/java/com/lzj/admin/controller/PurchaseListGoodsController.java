@@ -1,16 +1,16 @@
 package com.lzj.admin.controller;
 
 
-import com.lzj.admin.query.PurchaseListGoodsQuery;
-import com.lzj.admin.query.PurchaseListQuery;
-import com.lzj.admin.service.PurchaseListGoodsService;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.Map;
 
 import javax.annotation.Resource;
-import java.util.Map;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.lzj.admin.query.PurchaseListGoodsQuery;
+import com.lzj.admin.service.PurchaseListGoodsService;
 
 /**
  * 进货单商品表
@@ -20,5 +20,19 @@ import java.util.Map;
 @Controller
 @RequestMapping("/purchaseListGoods")
 public class PurchaseListGoodsController {
+	@Resource
+    private PurchaseListGoodsService purchaseListGoodsService;
 
+	/**
+	 * 进货商品列表
+	 * @param purchaseListGoodsQuery
+	 * @return
+	 */
+    @RequestMapping("list")
+    @ResponseBody
+    public Map<String,Object> purchaseListGoodsList(PurchaseListGoodsQuery purchaseListGoodsQuery){
+        return purchaseListGoodsService.purchaseListGoodsList(purchaseListGoodsQuery);
+    }
+    
+    
 }

@@ -17,6 +17,11 @@ layui.use(['table','laydate','layer',"form"],function(){
     var  tableIns = table.render({
         elem: '#daySale',
         url:ctx+"/sale/countSaleByDay",
+        //传参
+        where:{
+            begin:getBeforeDate(-6),
+            end:getBeforeDate(0)
+        },
         cellMinWidth : 95,
         height : "auto",
         toolbar: "#toolbarDemo",

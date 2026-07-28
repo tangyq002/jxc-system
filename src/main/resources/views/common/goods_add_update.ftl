@@ -81,14 +81,14 @@
             <div class="layui-input-block">
                 <input type="text" class="layui-input sellingPrice"
                         name="price" id="price"
-                       value="${(goods.lastPurchasingPrice)!""}">
+                       value="${(price)!(goods.lastPurchasingPrice)!""}">
             </div>
         </div>
         <div class="layui-col-xs6">
             <label class="layui-form-label">数量</label>
             <div class="layui-input-block">
                 <input type="number" class="layui-input inventoryQuantity"
-                       name="num" id="num" value="${(goods.num)!"0"}"required="required"min="0" max="100">
+                       name="num" id="num" value="${(num)!"0"}"required="required"min="0" max="100">
             </div>
         </div>
     </div>

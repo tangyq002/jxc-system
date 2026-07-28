@@ -1,5 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lzj.admin.mapper.PurchaseListMapper">
+<!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.lzj.admin.pojo.PurchaseList">
+        <id column="id" property="id" />
+        <result column="amount_paid" property="amountPaid" />
+        <result column="amount_payable" property="amountPayable" />
+        <result column="remarks" property="remarks" />
+        <result column="purchase_date" property="purchaseDate" />
+        <result column="purchase_number" property="purchaseNumber" />
+        <result column="state" property="state" />
+        <result column="supplier_id" property="supplierId" />
+        <result column="user_id" property="userId" />
+    </resultMap>
 
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, amount_paid, amount_payable, remarks, purchase_date, purchase_number, state, supplier_id, user_id
+    </sql>
+    
+    <!-- 查询当天最大进单号 -->
+    <select id="getNextPurchaseNumber" resultType="java.lang.String">
+        select max(purchase_number) as purchaseNumber
+        from t_purchase_list
+        where trunc(purchase_date) = trunc(sysdate)
+    </select>
+    
+    <!-- 分页查询列表 -->
+	<select id="purchaseList" resultType="com.lzj.admin.pojo.PurchaseList">
+	    SELECT
+	        pl.*,
+	        u.user_name AS userName,
+	        s.name AS supplierName
+	    FROM
+	        t_purchase_list pl
+	        LEFT JOIN t_user u ON pl.user_id = u.id
+	        LEFT JOIN t_supplier s ON pl.supplier_id = s.id
+	    <where>
+	        <if test="null != purchaseListQuery.purchaseNumber and purchaseListQuery.purchaseNumber != ''">
+	            pl.purchase_number = #{purchaseListQuery.purchaseNumber}
+	        </if>
+	        <if test="null != purchaseListQuery.supplierId">
+	            and pl.supplier_id = #{purchaseListQuery.supplierId}
+	        </if>
+	        <if test="null != purchaseListQuery.state">
+	            and pl.state = #{purchaseListQuery.state}
+	        </if>
+	        <if test="null != purchaseListQuery.startDate and purchaseListQuery.startDate != ''">
+	            and pl.purchase_date &gt;= #{purchaseListQuery.startDate}
+	        </if>
+	        <if test="null != purchaseListQuery.endDate and purchaseListQuery.endDate != ''">
+	            and pl.purchase_date &lt;= #{purchaseListQuery.endDate}
+	        </if>
+	    </where>
+	</select>
+	
+	<!-- 商品采购统计列表 分页，条件查询 -->
+	<!-- oracle查询返回map时自动把字段转成大写这里都加上双引号 -->
+	<select id="countPurchase" resultType="map">
+	    select pl.purchase_number as "number",pl.purchase_date as "date",s.name as "name",plg.code as "code",plg.name as "goodsName",plg.model as "model",
+	    gt.name as "typeName",plg.price as "price",plg.num as "num",plg.unit as "unitName",plg.total as "total" 
+	    from t_purchase_list pl
+	    left join t_supplier s on pl.supplier_id=s.id
+	    left join t_purchase_list_goods plg on pl.id=plg.purchase_list_id
+	    left join t_goods_type gt on plg.type_id=gt.id
+	    <where>
+	        <if test="purchaseListQuery.goodsName != null and purchaseListQuery.goodsName != ''">
+	            and plg.name like '%${purchaseListQuery.goodsName}%'
+	        </if>
+	        <if test="purchaseListQuery.state != null">
+		        and pl.state=#{purchaseListQuery.state}
+		    </if>
+		    <if test="purchaseListQuery.startDate != null and purchaseListQuery.startDate != ''">
+		        and pl.purchase_date &gt;= to_date(#{purchaseListQuery.startDate},'yyyy-mm-dd')
+		    </if>
+		    <if test="purchaseListQuery.endDate != null and purchaseListQuery.endDate != ''">
+		        and pl.purchase_date &lt; to_date(#{purchaseListQuery.endDate},'yyyy-mm-dd')+1
+		    </if>
+	        <if test="purchaseListQuery.typeId != null and purchaseListQuery.typeId != 0">
+	            and plg.type_id in 
+	            (select id from t_goods_type where id=#{purchaseListQuery.typeId} or p_id=#{purchaseListQuery.typeId})
+	        </if>
+	    </where>
+	</select>
 </mapper>

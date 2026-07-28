@@ -2,7 +2,7 @@ layui.use(['element','laydate','table','layer'],function(){
        var layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery,
         laydate = layui.laydate,
-        form = layui.form
+        form = layui.form,
         table = layui.table;
 
     laydate.render({
@@ -10,7 +10,7 @@ layui.use(['element','laydate','table','layer'],function(){
     });
     $.ajax({
         type:"post",
-        url:ctx+"/supplier/allGoodsSuppliers",
+        url:ctx+"/supplier/allSuppliers",
         success:function (data){
             if (data!== null) {
                 $.each(data, function(index, item) {

@@ -1,12 +1,12 @@
 package com.lzj.admin.service;
 
-import com.lzj.admin.pojo.SaleList;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.lzj.admin.pojo.SaleListGoods;
-import com.lzj.admin.query.SaleListQuery;
-
 import java.util.List;
 import java.util.Map;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.lzj.admin.pojo.SaleList;
+import com.lzj.admin.pojo.SaleListGoods;
+import com.lzj.admin.query.SaleListQuery;
 
 /**
  * <p>
@@ -28,5 +28,7 @@ public interface SaleListService extends IService<SaleList> {
     Map<String, Object> countSale(SaleListQuery saleListQuery);
 
     List<Map<String, Object>> countDaySale(String begin, String end);
+
+	List<Map<String, Object>> countMonthSale(String begin, String end);
 
 }

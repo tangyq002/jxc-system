@@ -19,6 +19,10 @@ layui.use(['table','laydate','layer',"form"],function(){
     var  tableIns = table.render({
         elem: '#monthSale',
         url:ctx+"/sale/countSaleByMonth",
+        where:{
+            begin:getBeforeMonth(-5),
+            end:getBeforeMonth(0)
+        },
         cellMinWidth : 95,
         height : "auto",
         toolbar: "#toolbarDemo",

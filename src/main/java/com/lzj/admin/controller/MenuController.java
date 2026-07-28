@@ -1,20 +1,20 @@
 package com.lzj.admin.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lzj.admin.dto.TreeDto;
-import com.lzj.admin.model.RespBean;
-import com.lzj.admin.pojo.Menu;
-import com.lzj.admin.service.MenuService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lzj.admin.dto.TreeDto;
+import com.lzj.admin.model.RespBean;
+import com.lzj.admin.pojo.Menu;
+import com.lzj.admin.service.MenuService;
 
 /**
  * 菜单控制器
@@ -24,5 +24,60 @@ import java.util.Map;
 @Controller
 @RequestMapping("/menu")
 public class MenuController {
+	@Resource
+    private MenuService menuService;
+	
+	@RequestMapping("index")
+	public String index(){
+	   return"/menu/menu";
+	}
+	
+	/**
+	 * 进入菜单管理列表
+	 * @return
+	 */
+	@RequestMapping("list")
+	@ResponseBody
+	public Map<String,Object> list(){
+	   return this.menuService.menuList();
+	}
+	
+	@RequestMapping("queryAllMenus")
+	@ResponseBody
+	public List<TreeDto> queryAllMenu(Integer roleId){
+	   return this.menuService.queryAllMenu(roleId);
+	}
+	@RequestMapping("addMenuPage")
+	public String addMenuPage(Integer grade,Integer pId, Model model){
+	   model.addAttribute("pId",pId);
+
+	   model.addAttribute("grade",grade);
+	   return "/menu/add";
+	}
+	@RequestMapping("save")
+	@ResponseBody
+	public RespBean save(Menu menu)
+	{
+	this.menuService.saveMenu(menu);
+	   return RespBean.success("保存成功");
+	}
+	@RequestMapping("delete")
+	@ResponseBody
+	public RespBean delete (Integer id){
+	   this.menuService.deleteMenu(id);
+	   return RespBean.success("删除成功");
+	}
+	@RequestMapping("updateMenuPage")
+	public String updateMenuPage(Integer id,Model model){
+	   Menu temp = this.menuService.getOne(new QueryWrapper<Menu>().eq("id", id));
+	   model.addAttribute("menu",temp);
+	   return "/menu/update";
+	}
+	@RequestMapping("update")
+	@ResponseBody
+	public RespBean updeta(Menu menu){
+	   this.menuService.updateMenu(menu);
+	   return RespBean.success("修改成功");
+	}
 
 }

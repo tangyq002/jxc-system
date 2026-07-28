@@ -1,16 +1,18 @@
 package com.lzj.admin.controller;
 
-import com.lzj.admin.model.RespBean;
-import com.lzj.admin.pojo.Goods;
-import com.lzj.admin.query.GoodsQuery;
-import com.lzj.admin.service.GoodsService;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
-import java.util.Map;
+import com.lzj.admin.model.RespBean;
+import com.lzj.admin.pojo.Goods;
+import com.lzj.admin.query.GoodsQuery;
+import com.lzj.admin.service.GoodsService;
 
 /**
  * 期初商品
@@ -42,8 +44,7 @@ public class StockController {
     @ResponseBody
     public Map<String,Object> listNoInventoryQuantity(GoodsQuery goodsQuery){
         goodsQuery.setType(1);
-        //return goodsService.goodsList(goodsQuery);
-        return null;
+        return goodsService.goodsList(goodsQuery);
     }
 
     /**
@@ -55,8 +56,7 @@ public class StockController {
     @ResponseBody
     public Map<String,Object> listHasInventoryQuantity(GoodsQuery goodsQuery){
         goodsQuery.setType(2);
-//        return goodsService.goodsList(goodsQuery);
-        return null;
+        return goodsService.goodsList(goodsQuery);
     }
 
 

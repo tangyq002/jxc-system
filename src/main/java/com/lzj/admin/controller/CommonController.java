@@ -1,16 +1,18 @@
 package com.lzj.admin.controller;
 
-import com.lzj.admin.model.GoodsModel;
-import com.lzj.admin.pojo.Goods;
-import com.lzj.admin.query.GoodsQuery;
-import com.lzj.admin.service.GoodsService;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
-import java.util.Map;
+import com.lzj.admin.model.GoodsModel;
+import com.lzj.admin.pojo.Goods;
+import com.lzj.admin.query.GoodsQuery;
+import com.lzj.admin.service.GoodsService;
 
 /**
  * @author TianTian
@@ -21,8 +23,6 @@ import java.util.Map;
 public class CommonController {
     @Resource
     private GoodsService goodsService;
-
-
 
     /**
      * 添加商品-选择商品页
@@ -41,6 +41,10 @@ public class CommonController {
      */
     @RequestMapping("toAddGoodsInfoPage")
     public String toGoodsInfoPage(Integer gid, Model model){
+    	//model传递商品信息
+        Goods goods = goodsService.queryGoodsById(gid);
+        model.addAttribute("goods", goods);
+        model.addAttribute("flag",0);
         return "common/goods_add_update";
     }
 
@@ -53,6 +57,12 @@ public class CommonController {
      */
     @RequestMapping("toUpdateGoodsInfoPage")
     public String toUpdateGoodsInfoPage(GoodsModel goodsModel, Model model){
+        Goods goods = goodsService.queryGoodsById(goodsModel.getId());
+        model.addAttribute("goods", goods);
+        //传入新增时候输入的单价和数量
+        model.addAttribute("price", goodsModel.getPrice());
+        model.addAttribute("num", goodsModel.getNum());
+        model.addAttribute("flag",1);
         return "common/goods_add_update";
     }
 
@@ -66,12 +76,15 @@ public class CommonController {
         return "common/stock_search";
     }
 
-
-
+    /**
+     * 当前库存列表
+     * @param goodsQuery
+     * @return
+     */
     @RequestMapping("stockList")
     @ResponseBody
-    public Map<String,Object> stockLick(GoodsQuery goodsQuery){
-        return null;
+    public Map<String,Object> stockList(GoodsQuery goodsQuery){
+        return goodsService.stockList(goodsQuery);
     }
 
 

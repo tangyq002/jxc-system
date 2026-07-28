@@ -23,4 +23,6 @@ public interface GoodsService extends IService<Goods> {
     Goods findGoodsByName(String name);
     
     Goods queryGoodsById(Integer id);
+
+	Map<String, Object> stockList(GoodsQuery goodsQuery);
 }

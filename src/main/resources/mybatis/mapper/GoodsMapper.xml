@@ -53,7 +53,7 @@
 		</where>
 	</select>
 	
-	<!-- 根据id查询商品详情，联表查 -->
+	<!-- 根据id查询商品详情，三表联查 -->
 	<select id="queryGoodsById" resultMap="BaseResultMap">
 	    select
 	    <include refid="Base_Column_List"/>
@@ -61,5 +61,16 @@
 	    left join t_goods_unit gu on g.unit = gu.id
 	    left join t_goods_type gt on g.type_id = gt.id
 	    where g.id = #{id}
+	</select>
+	
+	<!-- 当前库存查询 四表联查-->
+	<select id="stockList" resultMap="BaseResultMap">
+		select g.id,g.code,g.name,g.model,g.inventory_quantity,g.last_purchasing_price,g.purchasing_price,g.selling_price,g.producer,gu.name as unitName,gt.name as typeName,nvl(sum(slg.num),0) as saleTotal
+		from t_goods g
+		left join t_goods_unit gu on g.unit=gu.id
+		left join t_goods_type gt on g.type_id=gt.id
+		left join t_sale_list_goods slg on g.id=slg.goods_id
+		where g.is_del=0
+		group by g.id,g.code,g.name,g.model,g.inventory_quantity,g.last_purchasing_price,g.purchasing_price,g.selling_price,g.producer,gu.name,gt.name
 	</select>
 </mapper>
